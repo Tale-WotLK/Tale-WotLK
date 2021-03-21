@@ -146,6 +146,9 @@ function Tale:EventHandler(frame, event, ...)
     elseif (event == "GROUP_ROSTER_UPDATE") then
         Tale:GROUP_Handler(...)
 
+	elseif (event == "ACHIEVEMENT_EARNED") then
+			Tale:ACHIEVEMENT_EARNED_Handler(...)
+
     end
 
 end
@@ -379,6 +382,11 @@ function Tale:SaveVersion(version, position)
     table.insert(Tale_VersionData, format(version..", %d", position))
 end
 
+function Tale:ACHIEVEMENT_EARNED_Handler(...)
+	Tale:DebugMsg("ACHIEVEMENT_EARNED_Handler() called...")
+	Tale:AddScheduledScreenshot(0.5)
+end
+
 ----------------------------------------------
 --  Update saved data and initialize addon  --
 ----------------------------------------------
@@ -441,6 +449,8 @@ function Tale:RegisterEvents(frame)
     frame:RegisterEvent("PLAYER_CONTROL_GAINED")
     if (Tale_Options.questTurnInLog) then frame:RegisterEvent("QUEST_TURNED_IN"); end
     frame:RegisterEvent("GROUP_ROSTER_UPDATE")
+    frame:RegisterEvent("ACHIEVEMENT_EARNED")
+
 end
 
 
