@@ -41,7 +41,7 @@ Tale.Debug = nil
 Tale.WaitForTimePlayed = false
 Tale.ChatSettings = {}
 Tale.PlayerLevel = 1
-Tale.IsRetail = tonumber(string.sub(GetBuildInfo(), 1, 1)) > 1
+Tale.IsWrath = tonumber(string.sub(GetBuildInfo(), 1, 1)) == 3
 local deformat = LibStub("LibDeformat-3.0")
 
 
@@ -125,14 +125,14 @@ function Tale:EventHandler(frame, event, ...)
     elseif (event == "UPDATE_BATTLEFIELD_STATUS") then
         Tale:UPDATE_BATTLEFIELD_STATUS_Handler()
 
-    elseif (event == "COMBAT_LOG_EVENT_UNFILTERED") then
-	Tale:COMBAT_LOG_Handler(...)
+    --elseif (event == "COMBAT_LOG_EVENT_UNFILTERED") then
+	--Tale:COMBAT_LOG_Handler(...)                          -- TODO: This function throws errors in 3.3.5
 
     elseif (event == "PLAYER_ALIVE" or event == "PLAYER_UNGHOST") then
 	Tale:RESS_Handler(...)
 
-    elseif (event == "PLAYER_DEAD") then
-	Tale:PLAYER_DEAD_Handler(...)
+    --elseif (event == "PLAYER_DEAD") then
+	--Tale:PLAYER_DEAD_Handler(...)                          -- TODO: This function throws errors in 3.3.5
 
     elseif (event == "PLAYER_CONTROL_LOST") then
 	Tale:PLAYER_CONTROL_LOST_Handler(...)
@@ -338,21 +338,14 @@ function Tale:UPDATE_BATTLEFIELD_STATUS_Handler()
 end
 
 function Tale:SaveCurrentState(trigger)
-    local mapID = C_Map.GetBestMapForUnit("player")
-    local pos = nil
-    if not (mapID == nil) then
-        pos = C_Map.GetPlayerMapPosition(mapID, "player")
-    end
-    local x, y = -1, -1
-    if (pos == nil) then
-	x, y = -1, -1
-    else
-        x, y = pos:GetXY()
-    end
+    local mapID = GetCurrentMapAreaID()
+    local posX, posY = -1, -1
     if (mapID == nil) then
-	mapID = -1
+        mapID = -1
+    else
+        posX, posY = GetPlayerMapPosition("player")
     end
-    table.insert(Tale_LogData, format("%f, %f, %d, %d, %d, %s", x, y, mapID, time(), Tale.PlayerLevel, trigger))
+    table.insert(Tale_LogData, format("%f, %f, %d, %d, %d, %s", posX, posY, mapID, time(), Tale.PlayerLevel, trigger))
 end
 
 function Tale:StandardStateSave()
