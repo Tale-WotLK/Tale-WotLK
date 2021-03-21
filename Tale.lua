@@ -34,6 +34,7 @@ local Tale = Tale;
 ----------------------------
 --  Variables and Locals  --
 ----------------------------
+SCREENSHOT_SUCCESS = ""    -- Hides the "Screen Captured" text when a screenshot is take
 Tale.ADDONNAME = "Tale"
 Tale.ADDONVERSION = GetAddOnMetadata(Tale.ADDONNAME, "Version");
 Tale.BattlefieldScreenshotAlreadyTaken = false
